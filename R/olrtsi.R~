@@ -1,0 +1,19 @@
+olrtsi <- function() {
+#data(olrtsi)
+#load("GHE/data/olrtsi.rda")
+data(olrtsi)
+#load("GHE/data/atmOverturning.rda")
+data(atmOverturning)
+#load("GHE/data/Tt.prof.rda")
+data(Tt.prof)
+#load("GHE/data/Q.rda")
+data(Q)
+
+ebo <- lm(o ~ S,data=olrtsi)
+
+c <- summary(eba)$coefficients
+A.ac <- 100*sqrt(c[2]^2 + c[3]^2)/c[1]
+
+plot(olrtsi$t,olrtsi$o,pch=19,col="grey40")
+lines(olrtsi$t,olrtsi$S*(1-c[1]),lwd=5,col="red")
+}
