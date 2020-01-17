@@ -1,4 +1,4 @@
-co2 <- function(url="ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt",
+co2 <- function(url="ftp://ftp.cmdl.noaa.gov/ccg/co2/trends/co2_mm_mlo.txt",
                 plot=TRUE,Temp=TRUE) {
 
   # http://cdiac.ornl.gov/ftp/trends/co2/maunaloa.co2
@@ -59,7 +59,7 @@ co2 <- function(url="ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt
 }
   
 Keelercurve <- function(
-          url="ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt",
+          url="ftp://ftp.cmdl.noaa.gov/ccg/co2/trends/co2_mm_mlo.txt",
           urlbg="http://www.realclimate.org/images/raffinery.jpg") {
   
   #require(jpeg)
@@ -83,10 +83,10 @@ Keelercurve <- function(
   plot(yymm,co2, type='n')
   rasterImage(img, 0.999*min(yymm), 0.99*min(co2),
               1.001*max(yymm), 1.01*max(co2))
-  lines(yymm,co2,lwd=9,col="white")
-  lines(yymm,co2,lwd=7,col="grey30")
+  lines(yymm,co2,lwd=11,col="white")
+  lines(yymm,co2,lwd=9,col="grey30")
   text(mean(yymm),max(co2),"CO2 concentrations (Mauna Loa)",font=2,cex=1.75)
-  text(min(yymm),min(co2),min(yy),col="white",pos=4)
-  text(max(yymm),min(co2),max(yy),col="white",pos=2)
+  text(min(yymm),min(co2),"1958",col="white",pos=4)
+  text(max(yymm),min(co2),"1958",col="white",pos=2)
   dev2bitmap("CO2.png",res=150)
 }

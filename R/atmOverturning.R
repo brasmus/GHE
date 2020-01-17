@@ -28,11 +28,16 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   print("NCEP")
  
   print("T-t-prof:")
-  ncid2 <- open.ncdf(tempfil)
-  ta2 <- get.var.ncdf(ncid2,"TEMP") + 273.15
-  tim2 <-  get.var.ncdf(ncid2,"TIME")
-  lev2 <-  get.var.ncdf(ncid2,"LEVEL")
-  close.ncdf(ncid2)
+  # ncid2 <- open.ncdf(tempfil)
+  # ta2 <- get.var.ncdf(ncid2,"TEMP") + 273.15
+  # tim2 <-  get.var.ncdf(ncid2,"TIME")
+  # lev2 <-  get.var.ncdf(ncid2,"LEVEL")
+  # close.ncdf(ncid2)
+  ncid2 <- nc_open(tempfil)
+  ta2 <- ncvar_get(ncid2,"TEMP") + 273.15
+  tim2 <-  ncvar_get(ncid2,"TIME")
+  lev2 <-  ncvar_get(ncid2,"LEVEL")
+  nc_close(ncid2)
 
   print("Process with Ferret: v6.2")
   print("use ERAINT_TA_1979-2012.nc; let temp= ta[x=@ave,y=@ave]")
@@ -58,11 +63,16 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   save(file="GHE/data/ta2.rda",ta2)
   
   print("Use netCDF files downloaded from ECMWF.int:")
-  ncid <- open.ncdf("~/data/ERAINT/ERAINT_TA_1979-2012.nc")
-  lon = get.var.ncdf(ncid,"longitude")
-  lat=get.var.ncdf(ncid,"latitude")
-  lev=get.var.ncdf(ncid,"levelist")
-  tim=get.var.ncdf(ncid,"time")
+  # ncid <- open.ncdf("~/data/ERAINT/ERAINT_TA_1979-2012.nc")
+  # lon = get.var.ncdf(ncid,"longitude")
+  # lat=get.var.ncdf(ncid,"latitude")
+  # lev=get.var.ncdf(ncid,"levelist")
+  # tim=get.var.ncdf(ncid,"time")
+  ncid <- nc_open("~/data/ERAINT/ERAINT_TA_1979-2012.nc")
+  lon = ncvar_get(ncid,"longitude")
+  lat=ncvar_get(ncid,"latitude")
+  lev=ncvar_get(ncid,"levelist")
+  tim=ncvar_get(ncid,"time")
   nz <- length(lev); nt <- length(tim); nx <- length(lon); ny <- length(lat)
   ta <- matrix(rep(NA,nz*nt),nz,nt)
 
@@ -72,8 +82,9 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   dim(box.area) <- c(ny,nx); box.area <- t(box.area)
 
   for (iz in 1:nz){
-    t = get.var.ncdf(ncid,"ta",start=c(1,1,iz,1),count=c(nx,ny,1,nt))
-
+    #t = get.var.ncdf(ncid,"ta",start=c(1,1,iz,1),count=c(nx,ny,1,nt))
+    t = ncvar_get(ncid,"ta",start=c(1,1,iz,1),count=c(nx,ny,1,nt))
+    
     ysrt <- order(lat)
     image(lon,lat[ysrt],box.area[,ysrt],
           main=paste("Check: level=",lev[iz],"hPa"))
@@ -86,7 +97,8 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
     }
     #print(summary(c(t))); print(summary(ta[,it]))
   }
-  close.ncdf(ncid)
+  #close.ncdf(ncid)
+  nc_close(ncid)
   date <- caldat( tim/24 + julday(1,1,1900) )
   yymm <- date$year + (date$month - 0.5)/12
   attr(ta,'tim') <- tim
@@ -107,11 +119,16 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   save(file="GHE/data/ta.rda",ta)
   
   print("Use netCDF files downloaded from ECMWF.int:")
-  ncid <- open.ncdf("~/data/ERAINT/ERAINT_w_1979-2012.nc")
-  lon = get.var.ncdf(ncid,"longitude")
-  lat=get.var.ncdf(ncid,"latitude")
-  lev=get.var.ncdf(ncid,"levelist")
-  tim=get.var.ncdf(ncid,"time")
+  # ncid <- open.ncdf("~/data/ERAINT/ERAINT_w_1979-2012.nc")
+  # lon = get.var.ncdf(ncid,"longitude")
+  # lat=get.var.ncdf(ncid,"latitude")
+  # lev=get.var.ncdf(ncid,"levelist")
+  # tim=get.var.ncdf(ncid,"time")
+  ncid <- nc_open("~/data/ERAINT/ERAINT_w_1979-2012.nc")
+  lon = ncvar_get(ncid,"longitude")
+  lat=ncvar_get(ncid,"latitude")
+  lev=ncvar_get(ncid,"levelist")
+  tim=ncvar_get(ncid,"time")
   nz <- length(lev); nt <- length(tim); nx <- length(lon); ny <- length(lat)
   wa <- matrix(rep(NA,nz*nt),nz,nt)
 
@@ -121,7 +138,8 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   dim(box.area) <- c(ny,nx); box.area <- t(box.area)
 
   for (iz in 1:nz){
-    w = get.var.ncdf(ncid,"w",start=c(1,1,iz,1),count=c(nx,ny,1,nt))
+    #w = get.var.ncdf(ncid,"w",start=c(1,1,iz,1),count=c(nx,ny,1,nt))
+    w = ncvar_get(ncid,"w",start=c(1,1,iz,1),count=c(nx,ny,1,nt))
 
     ysrt <- order(lat)
     image(lon,lat[ysrt],box.area[,ysrt],
@@ -134,7 +152,8 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
       wa[iz,it] <- var(X)
     }
   }
-  close.ncdf(ncid)
+  #close.ncdf(ncid)
+  nc_close(ncid)
   date <- caldat( tim/24 + julday(1,1,1900) )
   yymm <- date$year + (date$month - 0.5)/12
   attr(wa,'tim') <- tim
@@ -166,11 +185,17 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   print("save/file=eraint-ta.nc temp")
   tempfil <- "~/ferret_scripts/eraint-ta.nc"
   print("T-t-prof:")
-  ncid2 <- open.ncdf(tempfil)
-  ta <- get.var.ncdf(ncid2,"TEMP")
-  tim2 <-  get.var.ncdf(ncid2,"TIME")
-  lev <-  get.var.ncdf(ncid2,"LEVELIST")
-  close.ncdf(ncid2)
+  
+  # ncid2 <- open.ncdf(tempfil)
+  # ta <- get.var.ncdf(ncid2,"TEMP")
+  # tim2 <-  get.var.ncdf(ncid2,"TIME")
+  # lev <-  get.var.ncdf(ncid2,"LEVELIST")
+  # close.ncdf(ncid2)
+  ncid2 <- nc_open(tempfil)
+  ta <- ncvar_get(ncid2,"TEMP")
+  tim2 <-  ncvar_get(ncid2,"TIME")
+  lev <-  ncvar_get(ncid2,"LEVELIST")
+  nc_close(ncid2)
 
   date2 <- caldat( tim2/24 + julday(1,1,1900) )
   yymm2 <- date2$year + (date2$month - 0.5)/12
@@ -197,11 +222,16 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
   #save/file=eraint-sephum.nc sh
   qfil <- "~/ferret_scripts/eraint-sephum.nc"
   print("Q:")
-  ncid4 <- open.ncdf(qfil)
-  Q <- get.var.ncdf(ncid4,"SH")
-  tim2 <-  get.var.ncdf(ncid4,"TIME")
-  lev <-  get.var.ncdf(ncid4,"LEVELIST")
-  close.ncdf(ncid4)
+  # ncid4 <- open.ncdf(qfil)
+  # Q <- get.var.ncdf(ncid4,"SH")
+  # tim2 <-  get.var.ncdf(ncid4,"TIME")
+  # lev <-  get.var.ncdf(ncid4,"LEVELIST")
+  # close.ncdf(ncid4)
+  ncid4 <- nc_open(qfil)
+  Q <- ncvar_get(ncid4,"SH")
+  tim2 <-  ncvar_get(ncid4,"TIME")
+  lev <-  ncvar_get(ncid4,"LEVELIST")
+  nc_close(ncid4)
 
   date2 <- caldat( tim2/24 + julday(1,1,1900) )
   yymm2 <- date2$year + (date2$month - 0.5)/12
@@ -226,10 +256,8 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
 
 AtmOverturning <- function() {
 
-#  load("GHE/data/wa.rda")
-#  load("GHE/data/ta.rda")
-    data("wa",envir=environment())
-    data("ta",envir=environment())
+  load("GHE/data/wa.rda")
+  load("GHE/data/ta.rda")
   lev <- attr(wa,'lev'); tim <- attr(wa,'tim')
   nz <- length(lev); nt <- length(tim)
 
@@ -285,7 +313,7 @@ emissionHeigth <- function(ncep=TRUE) {
 # Emission level height:
 
   #load("GHE/data/ta.rda")
-  data("ta",envir=environment())
+  data(ta,envir=environment())
   lev <- attr(ta,'lev'); tim <- attr(ta,'tim')
   time <- as.Date(tim/24, origin=as.Date('1900-01-01'))
   nz <- length(lev); nt <- length(tim)
@@ -346,7 +374,7 @@ emissionHeigth <- function(ncep=TRUE) {
 
   plot(time, y,type="l",lwd=4,
      main=expression(paste("Atmospheric emission level",T[254*K],
-         " and relative humidity ",q[tot])),
+         " and relative humidity ",Q[tot])),
      ylab="",xlab="Time",ylim=c(-1.5,6.5),
        xlim=as.Date(c("1948-01-01","2013-12-13")),
      sub="ERAINT")
@@ -368,7 +396,7 @@ emissionHeigth <- function(ncep=TRUE) {
   legend(as.Date("1948-06-01"),6.25,
        c(expression(paste("ERAINT:",Z[254*K])),
          expression(paste("NCEP/NCAR:",Z[254*K])),
-         expression(q[tot])),
+         expression(Q[tot])),
        col=c("black","grey","steelblue"),
        lty=c(1,1,1),lwd=c(4,2,2),bty="n",cex=0.75,
          bg="white")

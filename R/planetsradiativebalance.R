@@ -111,7 +111,6 @@ lines(c(0,800),c(0,800),col="red",lty=2,lwd=2)
 largesymbols(Ts,T.e(R,A),col="blue",cex=3)
 grid()
 text(725,180,"Venus",cex=1.5,col="white")
-text(Ts,T.e(R,A),substr(rownames(X),1,1),col='grey10',cex=0.7)
 #dev2bitmap("planetsinradiativebalance.png",res=200)
 #dev2bitmap("plantesinradiativebalance.pdf",type="pdfwrite")
 

@@ -2,7 +2,7 @@
 #"http://geosci.uchicago.edu/~rtp1/PrinciplesPlanetaryClimate/Courseware/
 #     PlanetaryClimateCourseware/ChapterScripts/Chapter4Scripts/PyTran.py"
 
-HITRAN <- function(param=2,plot=TRUE,xlim=c(1,20),ylim=c(0.1,100)) {
+HITRAN <- function(param=2,plot=TRUE) {
 
 elem <- switch(as.character(param),
   "1"="H2O", "21"="HOCl",
@@ -52,7 +52,7 @@ if (plot) {
   plot(10000/abp$waveNum,gauss.filt(abp$S,1000),type="l",log="xy",
      main=paste(elem,"Line absorption (HITRAN)"),sub=URL,
      xlab="wave length [micrometers]",ylab="Line strength [(m^2/kg)(cm^-1)]",
-     xlim=xlim,ylim=ylim,lwd=3)
+     xlim=c(1,20),ylim=c(0.1,100),lwd=3)
   polygon(c(10000/abp$waveNum,max(10000/abp$waveNum,na.rm=TRUE),
           min(10000/abp$waveNum,na.rm=TRUE)),
         c(gauss.filt(abp$S,1000),rep(min(abp$S,na.rm=TRUE),2)),

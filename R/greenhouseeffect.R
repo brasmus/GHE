@@ -136,13 +136,12 @@ GHEschematic <- function() {
 
   dev.new(width=10,height=10)
   par(bty="n",xaxt="n",yaxt="n",pty="m",mar = c(0, 0, 0, 0), xpd=NA)
-  #image.name <- "~/skyocean.jpg"
-  #img <- readJPEG(image.name)
-  data('skyocean')
-  
+  image.name <- "~/skyocean.jpg"
+  img <- readJPEG(image.name)
+
   plot(c(0,100),c(-10,100),type="n",
      main="",xlab="",ylab="")
-  rasterImage(skyocean,-20,130, 130,300, angle=-90)
+  rasterImage(img,-20,130, 130,300, angle=-90)
   for (ii in c(0,20)) {
     levels <- seq(0,50+ii,by=20)
 
