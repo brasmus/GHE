@@ -7,7 +7,7 @@ gauss.filt <- function (x, n) {
     i <- seq(0, qnorm(0.975), length = n/2)
     win <- dnorm(c(sort(-i), i))
     win <- win/sum(win)
-    y <- filter(x, win)
+    y <- stats::filter(x, win)
     y
 }
 
@@ -41,7 +41,7 @@ stand <- function (x, m = NULL, s = NULL,ii=NULL,verbose=FALSE) {
 }
 
 ma.filt <- function (x, n) {
-    y <- filter(x, rep(1, n)/n)
+    y <- stats::filter(x, rep(1, n)/n)
     y
 }
 

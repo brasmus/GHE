@@ -256,8 +256,10 @@ prepareData <- function(tempfil= "~/ferret_scripts/ncep-ta.nc") {
 
 AtmOverturning <- function() {
 
-  load("GHE/data/wa.rda")
-  load("GHE/data/ta.rda")
+  #load("GHE/data/wa.rda")
+  #load("GHE/data/ta.rda")
+  data("wa")
+  data("ta")
   lev <- attr(wa,'lev'); tim <- attr(wa,'tim')
   nz <- length(lev); nt <- length(tim)
 

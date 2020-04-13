@@ -49,7 +49,7 @@ abp$S = 0.1*(N.avogadro/mol.weight)*abp$lineStrength
 
 if (plot) {
   par(cex.sub=0.65)
-  plot(10000/abp$waveNum,gauss.filt(abp$S,1000),type="l",log="xy",
+  plot(10000/abp$waveNum,GHE::gauss.filt(abp$S,1000),type="l",log="xy",
      main=paste(elem,"Line absorption (HITRAN)"),sub=URL,
      xlab="wave length [micrometers]",ylab="Line strength [(m^2/kg)(cm^-1)]",
      xlim=c(1,20),ylim=c(0.1,100),lwd=3)

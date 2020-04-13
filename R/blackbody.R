@@ -2,13 +2,16 @@
 # by R.E. Benestad, 14.06.2010
 # R can be downloaded from http://cran.r-project.org 
 # Fleagle & Businger (1980) 'An introduction to Atmospheric Physics'  eq. 5.18, p. 215
+# Unit: W /m^2 (1.0-6m)^1 sr^1
 # to execute, write 'source("blackbody.R")' at the R-prompt.
 
-blackbody <- function(h=6.64e-34,k=1.38e-23,c=3.00e8,HITRAN=TRUE) {
+Ll <- function(Temp,l,alpha,h=6.64e-34,k=1.38e-23,c=3.00e8) { 
   alpha<-2*h*c^2
+  alpha/( l^5 * (exp(h*c/(k*l*Temp))-1) )
+}
 
-  Ll <- function(Temp,l,alpha) alpha/( l^5 * (exp(h*c/(k*l*Temp))-1) )
-
+blackbody <- function(h=6.64e-34,k=1.38e-23,c=3.00e8,HITRAN=TRUE) {
+  
 
   i<-seq(log(100),log(20000),by=0.01)
   l<-exp(i) * 1.00e-9

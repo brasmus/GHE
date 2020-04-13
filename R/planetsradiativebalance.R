@@ -100,17 +100,22 @@ grid()
 #dev2bitmap("plantesinradiativebalance0.png",res=200)
 #dev2bitmap("plantesinradiativebalance0.pdf",type="pdfwrite")
 
-dev.new()
+#dev.new()
 par(ps=12,bg="black",col.axis="white",col.main="white",col.lab="white",
-    cex.lab=1.5)
+    cex.lab=1.5,fig=fig.old,mar=c(4,4,2,2))
 plot(Ts,T.e(R,A),pch=pch,col=col,cex=1.5,
      main="Our Solar System: Surface & Emission Temperature",
      sub="GHE affects observed temperature, but is not accounted for in predictions",
      xlab="measured",ylab="predicted",xlim=c(0,800),ylim=c(0,800))
+# plot(Ts,T.e(R,A),pch=pch,col=col,cex=1.5,
+#      main="Solsystemet: planetenes temperatur",
+#      #sub="GHE affects observed temperature, but is not accounted for in predictions",
+#      xlab="Målt",ylab="Beregnet",xlim=c(0,800),ylim=c(0,800))
 lines(c(0,800),c(0,800),col="red",lty=2,lwd=2)
 largesymbols(Ts,T.e(R,A),col="blue",cex=3)
 grid()
-text(725,180,"Venus",cex=1.5,col="white")
+text(Ts,T.e(R,A),substr(rownames(X),1,1))
+#text(725,180,"Venus",cex=1.5,col="white")
 #dev2bitmap("planetsinradiativebalance.png",res=200)
 #dev2bitmap("plantesinradiativebalance.pdf",type="pdfwrite")
 
